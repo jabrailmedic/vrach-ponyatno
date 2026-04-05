@@ -1,2 +1,0 @@
-# vrach-ponyatno
-ВрачПонятно / DoctorPlain
