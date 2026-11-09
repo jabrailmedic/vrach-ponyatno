@@ -6,6 +6,7 @@ services:
     region: frankfurt
     buildCommand: npm install
     startCommand: npm start
+    autoDeploy: false
     envVars:
       - key: NODE_VERSION
         value: "20"
