@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: clinical-simulator
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: OPENAI_MODEL
+        value: gpt-4.1-mini
