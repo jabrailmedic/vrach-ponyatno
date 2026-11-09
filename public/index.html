@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f4f6f8"><title>Клиническая практика — виртуальный пациент</title>
+  <link rel="stylesheet" href="/styles.css"><script src="/app.js" defer></script>
+</head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/" aria-label="Клиническая практика"><span class="brand-mark">К</span><span><b>Клиническая практика</b><small>Учебный симулятор</small></span></a>
+  <div class="top-meta"><span class="live-dot"></span><span>Учебная сессия</span><span class="top-sep"></span><span id="elapsed">00:00</span></div>
+  <button class="button button-quiet" id="restartBtn" type="button">Новая сессия</button>
+</header>
+<main class="layout">
+  <section class="workspace">
+    <div class="case-heading"><div><div class="eyebrow">ПРИЁМНОЕ ОТДЕЛЕНИЕ <span>·</span> ТЕРАПИЯ</div><h1>Первичный осмотр пациента</h1><p class="subtitle" id="caseSubtitle">Соберите анамнез и определите дальнейшую тактику.</p></div><span class="case-number">КЕЙС 01</span></div>
+    <div class="patient-strip"><div class="avatar">АВ</div><div class="patient-identity"><b>Александр Викторович</b><span>Мужчина, 64 года · обратился самостоятельно</span></div><div class="patient-status"><span class="status-dot"></span>На осмотре</div></div>
+    <div class="section-head"><div><h2>Беседа с пациентом</h2><p>Задавайте вопросы своими словами. Пациент отвечает в рамках своей истории.</p></div><span class="count" id="messageCount">0 сообщений</span></div>
+    <div class="chat-panel"><div id="chat" class="chat" aria-live="polite"><div class="message patient-message"><div class="message-label">Александр Викторович <span>· пациент</span></div><p>Мне тяжело дышать. И в груди справа болит, особенно когда пытаюсь глубоко вдохнуть.</p></div></div><div class="composer"><textarea id="question" rows="2" maxlength="1000" placeholder="Например: Когда началась боль? Что усиливает одышку? Принимаете ли вы лекарства?" aria-label="Вопрос пациенту"></textarea><div class="composer-bottom"><span>Enter — отправить · Shift + Enter — новая строка</span><button class="button button-primary" id="sendBtn" type="button">Отправить вопрос <span>↗</span></button></div></div></div>
+    <div class="section-head action-heading"><div><h2>Клинические действия</h2><p>Решите самостоятельно, какие данные нужны для оценки состояния.</p></div></div>
+    <div class="tabs" role="tablist"><button class="tab active" data-tab="exams" role="tab" aria-selected="true">Обследования</button><button class="tab" data-tab="treatments" role="tab" aria-selected="false">Лечебная тактика</button><button class="tab" data-tab="notes" role="tab" aria-selected="false">Мои записи</button></div>
+    <section id="examsPanel" class="tab-panel"><div class="panel-intro"><b>Назначение исследований</b><span>Результат появится после назначения</span></div><div id="examList" class="action-list"></div></section>
+    <section id="treatmentsPanel" class="tab-panel hidden"><div class="panel-intro"><b>Лечебные мероприятия</b><span>Учитывайте состояние и противопоказания</span></div><div id="treatmentList" class="action-list"></div></section>
+    <section id="notesPanel" class="tab-panel hidden"><div class="panel-intro"><b>Рабочие записи</b><span>Фиксируйте гипотезы и важные данные</span></div><textarea id="noteInput" class="note-input" rows="4" placeholder="Жалобы, анамнез, объективные данные, дифференциальный диагноз…"></textarea><button id="saveNote" class="button button-secondary">Сохранить запись</button><div id="savedNotes" class="saved-notes"></div></section>
+    <section class="diagnosis-card"><div><div class="eyebrow">ЗАВЕРШЕНИЕ ПРИЁМА</div><h2>Сформулируйте клиническое заключение</h2><p>Укажите предварительный диагноз и кратко обоснуйте решение. Вы можете вернуться к беседе и обследованиям в любой момент.</p></div><label class="field-label" for="diagnosis">Предварительный диагноз</label><input id="diagnosis" class="text-input" maxlength="500" placeholder="Введите диагноз своими словами"><label class="field-label" for="reasoning">Клиническое обоснование</label><textarea id="reasoning" class="note-input" rows="4" maxlength="3000" placeholder="Какие данные подтверждают вашу гипотезу? Что необходимо исключить?"></textarea><button id="finishBtn" class="button button-primary finish-button">Завершить приём и получить разбор</button></section>
+  </section>
+  <aside class="sidebar">
+    <div class="side-card"><div class="side-title"><h3>Показатели</h3><span class="muted-tag">Доступно по запросу</span></div><p class="side-description">Первичные показатели откроются после соответствующего обследования.</p><div class="vitals-grid"><div class="vital-box"><span>АД</span><b id="bp">—</b><small>мм рт. ст.</small></div><div class="vital-box"><span>Пульс</span><b id="hr">—</b><small>уд/мин</small></div><div class="vital-box"><span>SpO₂</span><b id="spo2">—</b><small>%</small></div><div class="vital-box"><span>Температура</span><b id="temp">—</b><small>°C</small></div></div></div>
+    <div class="side-card"><div class="side-title"><h3>Ход приёма</h3><span id="progressLabel" class="progress-label">0 действий</span></div><div class="progress-track"><div id="progressBar"></div></div><div id="timeline" class="timeline"><p class="empty-state">Здесь будут отображаться ваши действия и полученные результаты.</p></div></div>
+    <div class="side-card guidance-card"><div class="guidance-icon">i</div><div><b>Работайте как на настоящем приёме</b><p>Не ищите готовый сценарий ответа. Уточняйте жалобы, оценивайте риски и выбирайте следующий шаг на основании полученных данных.</p></div></div>
+    <div class="side-foot">Симулятор предназначен для обучения. Все клинические решения в реальной практике принимаются по действующим рекомендациям и под контролем специалиста.</div>
+  </aside>
+</main>
+<div id="toast" class="toast" role="status"></div>
+<div id="reviewModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="reviewTitle"><div class="modal-card"><button id="closeReview" class="modal-close" aria-label="Закрыть">×</button><div class="eyebrow">РАЗБОР СЛУЧАЯ</div><h2 id="reviewTitle">Приём завершён</h2><div id="reviewContent"></div></div></div>
+</body></html>
